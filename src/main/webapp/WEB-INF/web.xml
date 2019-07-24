@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+         http://java.sun.com/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="3.0">
+
+  <!-- 加载spring配置文件 -->
+  <!-- 关联到spring主配置文件的路径地址  classpath根目录-->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:spring/applicationContext.xml</param-value>
+  </context-param>
+
+  <!-- 配置监听器加载spring的配置文件 -->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <!-- 配置过滤器，过滤编码格式 为utf-8,只支持post提交-->
+  <filter>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <!--异步支持  -->
+    <async-supported>true</async-supported>
+    <!-- 初始化 编码格式为UTF-8,只适用于post提交-->
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern><!--过滤所有的请求-->
+  </filter-mapping>
+  <!-- 加载springmvc配置文件 -->
+  <!-- 配置DispatcherServlet，来加载springmvc的配置 -->
+  <servlet>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:mvc/springmvc.xml</param-value>
+    </init-param>
+    <!-- 启动优先加载 -->
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>dispatcherServlet</servlet-name>
+     <url-pattern>/</url-pattern>
+    <!--加载所有的方式-->
+    <!--<url-pattern>*.do</url-pattern>-->
+    <!--只加载后缀名为.do 后台开发-->
+    <!-- <url-pattern>*.html</url-pattern>-->
+    <!--只加载后缀名为.html 前台开发-->
+  </servlet-mapping>
+
+</web-app>

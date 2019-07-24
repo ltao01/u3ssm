@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!--    可以在控制台输出日志信息：sql语句和参数 -->
+    <settings>
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+
+    <!--别名设置-->
+    <typeAliases>
+        <!--type属性表示类型。属性值一般为类的类地址 alias表示别名-->
+        <typeAlias type="java.util.List" alias="list"></typeAlias>
+        <!--以扫描包的形式 去设置别名，别名是当前类的类名-->
+
+        <package name="cn.kgc.pojo"></package>
+    </typeAliases>
+
+    <!--1.在mybatis核心配置文件中配置-->
+    <!-- 3.配置分页插件 -->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!-- 3.3.0版本可用 - 分页参数合理化，默认false禁用 -->
+            <!-- pageNum表示当前页 pages表示尾页 -->
+            <!-- true启用合理化时，如果pageNum<1会查询第一页，如果pageNum>pages会查询最后一页 -->
+            <!-- false禁用合理化时，如果pageNum<1或pageNum>pages会返回空数据 -->
+            <property name="reasonable" value="true"/>
+        </plugin>
+    </plugins>
+    <!-- &lt;!&ndash;连接数据库的环境设置&ndash;&gt;
+     <environments default="development">&lt;!&ndash;开发环境&ndash;&gt;
+         <environment id="development">&lt;!&ndash;标识&ndash;&gt;
+             <transactionManager type="JDBC"/>&lt;!&ndash;事务类型&ndash;&gt;
+             &lt;!&ndash;POOLED表示合并数据源，连接数据库的时候允许多种数据源同时连接数据库&ndash;&gt;
+             <dataSource type="POOLED">&lt;!&ndash;连接数据库的数据源&ndash;&gt;
+                 <property name="driver" value="${jdbc.driver}"></property>
+                 <property name="url" value="${jdbc.url}"></property>
+                 <property name="username" value="${jdbc.username}"></property>
+                 <property name="password" value="${jdbc.password}"></property>
+
+             </dataSource>
+         </environment>
+     </environments>
+     &lt;!&ndash;映射器，在核心配置文件中关联映射实体类映射文件&ndash;&gt;
+     <mappers>
+
+         &lt;!&ndash;<package name="cn.kgc.dao"></package>&ndash;&gt;
+         <mapper resource="mapper/cardMapper.xml"></mapper>
+         <mapper resource="mapper/userMapper.xml"></mapper>
+     </mappers>-->
+</configuration>

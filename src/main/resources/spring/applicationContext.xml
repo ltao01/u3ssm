@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"> <!-- bean definitions here -->
+
+    <!--设置扫描包路径地的范围-->
+    <context:component-scan base-package="cn.kgc.service"></context:component-scan>
+    <!--加载数据库信息-->
+    <context:property-placeholder location="classpath:properties/db.properties"></context:property-placeholder>
+    <!--连接数据库操作-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" >
+        <property name="driverClass" value="${jdbc.driver}"/>
+        <!-- 配置Jdbc的Url -->
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <!-- 配置用户名 -->
+        <property name="user" value="${jdbc.username}"/>
+        <!-- 密码 -->
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+    <!--配置事务管理-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <!--事务注解驱动-->
+    <tx:annotation-driven transaction-manager="transactionManager"></tx:annotation-driven>
+    <!--spring管理mybatis的配置-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--属性赋值-->
+        <property name="dataSource" ref="dataSource"></property>
+        <!--spring管理mybatis的核心配置文件-->
+        <property name="configLocation" value="classpath:mybatis/SqlMapConfig.xml"></property>
+        <!--spring管理sql映射文件-->
+        <property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"></property>
+    </bean>
+    <!--spring的ioc管理dao接口-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--spring 扫描dao接口的包路径地址-->
+        <property name="basePackage" value="cn.kgc.mapper"></property>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+</beans>
